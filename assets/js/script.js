@@ -5,14 +5,29 @@ const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal')
 document.getElementById('status').addEventListener('click', e => getStatus(e));
 document.getElementById('submit').addEventListener('click', e => postForm(e));
 
+function processOptions(form) {
+    // Iterate through the options, push each value into a temporary array
+    // and convert the array back to a string
+    let optArray = [];
 
+    for (let entry of form.entries()) {
+        if (entry[0] === 'options') {
+            optArray.push(entry[1]);
+        }
+    }
+    form.delete('options');
+
+    form.append('options', optArray.join());
+
+    return form;
+}
 
 // 1. A function to make the request
 // 2. A function to display data
 
 async function postForm(e) {
 
-    const form = new FormData(document.getElementById("checksform"));
+    const form = processOptions(new FormData(document.getElementById("checksform")));
 
     for (let entry of form.entries()) {
         console.log(entry);
